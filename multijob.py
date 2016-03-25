@@ -9,11 +9,11 @@ class multijob(object):
     def run_job(self, args, nice=None):
         while not (len(self.jobs) < self.max_jobs or self.poll_jobs()):
             time.sleep(self.poll_interval)
-        if nice:
+        if nice is not None:
             def set_nice():
                 import os
                 os.nice(nice)
-            self.jobs.append(subprocess.Popen(args),preexec_fn=set_nice)
+            self.jobs.append(subprocess.Popen(args,preexec_fn=set_nice))
         else:
             self.jobs.append(subprocess.Popen(args))
     def wait_all(self):
