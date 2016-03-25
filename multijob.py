@@ -27,3 +27,5 @@ class multijob(object):
                 self.jobs.remove(child)
                 return True
         return False
+    def __del__(self):
+        self.wait_all()

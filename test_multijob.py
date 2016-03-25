@@ -28,8 +28,17 @@ class TestMultiJobTiming(unittest.TestCase):
         m.run_job(cmd, nice=10)
         pid = m.jobs[0].pid
         p = psutil.Process(pid)
-        print p.nice()
         self.assertEqual(p.nice(), 10)
         m.wait_all()
+    def test_dtor(self):
+        def in_scope():
+            cmd = ["python", "-c", "import time; time.sleep(0.2)"]
+            m = multijob.multijob(1,0.1)
+            m.run_job(cmd)
+        start = time.time()
+        in_scope()
+        spent = time.time() - start
+        self.assertGreater(spent, 0.2)
+
 if __name__ == '__main__':
     unittest.main()
